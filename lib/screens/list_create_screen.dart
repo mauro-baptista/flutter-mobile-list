@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ListCreate extends StatelessWidget {
+class ListCreateScreen extends StatelessWidget {
   static const routeName = '/list/create';
 
   @override

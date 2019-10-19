@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../screens/list_create.dart';
+import '../screens/list_create_screen.dart';
 import '../widgets/main_drawer.dart';
 
 class ListsScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class ListsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(ListCreate.routeName);
+              Navigator.of(context).pushNamed(ListCreateScreen.routeName);
             }
           )
         ],

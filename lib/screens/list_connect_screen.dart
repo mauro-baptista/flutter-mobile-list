@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ListConnect extends StatelessWidget {
+class ListConnectScreen extends StatelessWidget {
   static const routeName = '/list/connect';
 
   @override

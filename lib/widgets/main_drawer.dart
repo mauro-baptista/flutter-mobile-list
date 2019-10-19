@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
-import '../screens/list_connect.dart';
-import '../screens/list_create.dart';
-import '../screens/settings.dart';
+import '../screens/list_connect_screen.dart';
+import '../screens/list_create_screen.dart';
+import '../screens/settings_screen.dart';
 
 class MainDrawer extends StatelessWidget {
 
@@ -62,7 +62,7 @@ class MainDrawer extends StatelessWidget {
             leading: Icon(Icons.add),
             title: Text('Create new List'),
             onTap: () {
-              Navigator.of(context).pushNamed(ListCreate.routeName);
+              Navigator.of(context).pushNamed(ListCreateScreen.routeName);
             }
           ),
           Divider(),
@@ -70,7 +70,7 @@ class MainDrawer extends StatelessWidget {
             leading: Icon(Icons.cloud_queue),
             title: Text('Connect to a List'),
             onTap: () {
-              Navigator.of(context).pushNamed(ListConnect.routeName);
+              Navigator.of(context).pushNamed(ListConnectScreen.routeName);
             }
           ),
           Divider(),
@@ -78,7 +78,7 @@ class MainDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              Navigator.of(context).pushNamed(Settings.routeName);
+              Navigator.of(context).pushNamed(SettingsScreen.routeName);
             }
           ),
           Divider(),
