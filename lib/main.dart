@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './screens/lists_screen.dart';
-import './screens/list_connect.dart';
-import './screens/list_create.dart';
+import './screens/list_connect_screen.dart';
+import './screens/list_create_screen.dart';
 import './screens/login_screen.dart';
-import './screens/settings.dart';
+import './screens/settings_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,9 +28,9 @@ class MyApp extends StatelessWidget {
           ),
           home: auth.isAuth ? ListsScreen() : LoginScreen(),
           routes: {
-            ListCreate.routeName: (context) => ListCreate(),
-            ListConnect.routeName: (context) => ListConnect(),
-            Settings.routeName: (context) => Settings(),
+            ListCreateScreen.routeName: (context) => ListCreateScreen(),
+            ListConnectScreen.routeName: (context) => ListConnectScreen(),
+            SettingsScreen.routeName: (context) => SettingsScreen(),
           },
         ),
       ),
