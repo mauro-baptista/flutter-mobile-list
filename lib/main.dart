@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_list/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
 import './screens/lists_screen.dart';
+import './screens/list_connect.dart';
+import './screens/list_create.dart';
+import './screens/login_screen.dart';
+import './screens/settings.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,7 +26,12 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             accentColor: Colors.greenAccent,
           ),
-          home: auth.isAuth ? ListsScreen() : LoginScreen()
+          home: auth.isAuth ? ListsScreen() : LoginScreen(),
+          routes: {
+            ListCreate.routeName: (context) => ListCreate(),
+            ListConnect.routeName: (context) => ListConnect(),
+            Settings.routeName: (context) => Settings(),
+          },
         ),
       ),
     );
