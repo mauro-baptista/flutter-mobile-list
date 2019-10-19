@@ -18,14 +18,16 @@ class User {
     this.image,
   });
 
-  String toJson() {
-    return json.encode({
-      'id': id,
-      'name': name,
-      'email': email,
-      'image': image,
-    });
-  }
+  String get firebaseId => email.replaceAll('.', '_');
+
+  String toJson() => json.encode(this.toMap());
+
+  Map<String, String> toMap() => {
+    'id': id,
+    'name': name,
+    'email': email,
+    'image': image,
+  };
 
   static User fromMap(String userData) {
     Map<String, Object> user = json.decode(userData);
@@ -38,10 +40,7 @@ class User {
     );
   }
 
-  void testSave()
-  {
-    db.reference().child('user').push().set(<String, String> {
-      'teste': 'ola',
-    });
-  }
+  void store() => db.reference().child('user/$firebaseId').update(this.toMap());
+
+  Query lists() => db.reference().child('user/$firebaseId/lists');
 }

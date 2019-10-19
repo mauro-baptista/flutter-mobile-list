@@ -11,23 +11,21 @@ class Auth with ChangeNotifier {
   
   User _user;
 
-  bool get isAuth {
-    return _user != null;
-  }
+  bool get isAuth =>_user != null;
 
-  User get user {
-    return _user;
-  }
+  User get user => _user;
 
   Future<void> login() async {
     final prefs = await SharedPreferences.getInstance();
-    if (! prefs.containsKey('user')) {
-      _googleSingIn();
-      
-      return;
+    if (prefs.containsKey('user')) {
+      _user = User.fromMap(prefs.get('user'));
     }
 
-    _user = User.fromMap(prefs.get('user'));
+    if (_user == null) {
+      _user = await _googleSingIn();
+
+      _user.store();
+    }
 
     notifyListeners();
   }
@@ -41,7 +39,7 @@ class Auth with ChangeNotifier {
     _signOutGoogle();
   }
 
-  Future<void> _googleSingIn() async {
+  Future<User> _googleSingIn() async {
     final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
@@ -67,7 +65,7 @@ class Auth with ChangeNotifier {
 
     (await SharedPreferences.getInstance()).setString('user', _user.toJson());
 
-    notifyListeners();
+    return _user;
   } 
 
   void _signOutGoogle() async {
