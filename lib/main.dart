@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (context, auth, child) => MaterialApp(
-          title: 'Flutter Demo',
+          title: 'Mobile App',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             accentColor: Colors.greenAccent,

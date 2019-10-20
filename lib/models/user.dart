@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_database/firebase_database.dart';
 
+import '../helper/db.dart';
+
 class User {
   String id;
   String email;
   String name;
   String image;
 
-  final FirebaseDatabase db = FirebaseDatabase();
+  DB _db = DB().table('users');
 
   User({
     @required this.id,
@@ -40,7 +42,11 @@ class User {
     );
   }
 
-  void store() => db.reference().child('user/$firebaseId').update(this.toMap());
+  void store() => _db.reference.child(firebaseId).set(this.toMap());
 
-  Query lists() => db.reference().child('user/$firebaseId/lists');
+  void attachList(String listKey) => _db.reference.child(firebaseId).child('lists').update({
+    listKey: true,
+  });
+
+  Query lists() => _db.reference.child(firebaseId).child('lists');
 }

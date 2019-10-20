@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/block_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+import '../models/user.dart';
+import '../models/list.dart';
+import './list_show_screen.dart';
 
 class ListCreateScreen extends StatefulWidget {
   static const routeName = '/list/create';
@@ -10,11 +16,43 @@ class ListCreateScreen extends StatefulWidget {
 
 class _ListCreateScreenState extends State<ListCreateScreen> {
   final _form = GlobalKey<FormState>();
+  
+
+  String _title;
   bool _isShared = false;
-  Color _pickerColor = Color(0xff03a9f4);
+  Color _pickedColor = Color(0xff03a9f4);
+
+  bool _isLoading = false;
+
+  void _saveForm(BuildContext context, User user) {
+    if (!_form.currentState.validate()) {
+      return;
+    }
+
+    _form.currentState.save();
+    
+    setState(() {
+      _isLoading = true;
+    });
+
+    String listKey = List(
+      title: _title,
+      color: _pickedColor,
+      shared: _isShared,
+      user: user,
+    ).store();
+        
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (BuildContext context) => ListShowScreen(listKey),
+      )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _user = Provider.of<Auth>(context).user;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Create New List'),
@@ -30,6 +68,16 @@ class _ListCreateScreenState extends State<ListCreateScreen> {
                 decoration: InputDecoration(
                   labelText: 'Title',
                 ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Title is required';
+                  }
+
+                  return null;
+                },
+                onSaved: (value) {
+                  _title = value;
+                }
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -41,13 +89,13 @@ class _ListCreateScreenState extends State<ListCreateScreen> {
                 ),
               ),
               BlockPicker(
-                pickerColor: _pickerColor,
-                onColorChanged: (value) {
+                pickerColor: _pickedColor,
+                onColorChanged: (Color value) {
                   setState(() {
-                    _pickerColor = value;
+                    _pickedColor = value;
                   });
                 },
-                layoutBuilder: (BuildContext context, List<Color> colors, PickerItem child) {
+                layoutBuilder: (context, colors, child) {
                   return Container(
                     width: double.infinity,
                     height: 310,
@@ -76,8 +124,8 @@ class _ListCreateScreenState extends State<ListCreateScreen> {
                 color: Theme.of(context).accentColor,
                 elevation: 0,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                onPressed: () => {},
-              )
+                onPressed: () => _isLoading ? null : _saveForm(context, _user),
+              ),
             ],
           ),
         ),
