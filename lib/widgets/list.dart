@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class List extends StatelessWidget {
-  final DataSnapshot snapshot;
+  final String listKey;
 
-  List(this.snapshot);
+  List(this.listKey);
 
   @override
   Widget build(BuildContext context) {
-    return Text(snapshot.value.toString());
+    return Text(listKey);
   }
 }

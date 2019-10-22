@@ -25,14 +25,16 @@ class _ListShowScreenState extends State<ListShowScreen> {
 
   @override
   void didChangeDependencies() {
-    if (_runLoadList) {
-      _loadList();
-    }
+    _loadList();
     
     super.didChangeDependencies();
   }
 
   void _loadList() async {
+    if (!_runLoadList) {
+      return;
+    }
+
     _runLoadList = false;
     _isLoading = true;
 
@@ -52,7 +54,9 @@ class _ListShowScreenState extends State<ListShowScreen> {
         title: Text(_list.title),
         backgroundColor: _list.color,
       ),
-      body: Text('TODO: List Show'),
+      body: _isLoading
+        ? CircularProgressIndicator()
+        : Text('TODO: List Show'),
     );
   }
 }

@@ -42,11 +42,20 @@ class User {
     );
   }
 
-  void store() => _db.reference.child(firebaseId).set(this.toMap());
+  void store() => _db.reference.child(firebaseId).update(this.toMap());
 
   void attachList(String listKey) => _db.reference.child(firebaseId).child('lists').update({
     listKey: true,
   });
 
-  Query lists() => _db.reference.child(firebaseId).child('lists');
+  Future<List> lists() async {
+    var lists = new List<String>();
+    DataSnapshot userListData = await _db.reference.child(firebaseId).child('lists').once();
+    
+    for(String key in userListData.value.keys) {
+      lists.add(key);
+    } 
+
+    return  lists;
+  } 
 }
