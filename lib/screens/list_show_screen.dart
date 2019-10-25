@@ -1,8 +1,11 @@
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../models/list.dart';
+import '../providers/items.dart';
+import '../providers/lists.dart';
+import '../widgets/item_add.dart';
 
 class ListShowScreen extends StatefulWidget {
   final String listKey;
@@ -14,7 +17,7 @@ class ListShowScreen extends StatefulWidget {
 }
 
 class _ListShowScreenState extends State<ListShowScreen> {
-  List _list = List(color: Colors.black, title: 'Loading'); 
+  Lists _list = Lists(color: Colors.black, title: 'Loading'); 
   bool _runLoadList = true;
   bool _isLoading = false;
 
@@ -38,7 +41,7 @@ class _ListShowScreenState extends State<ListShowScreen> {
     _runLoadList = false;
     _isLoading = true;
 
-    var list = await List().fetch(widget.listKey);
+    var list = await Lists().fetch(widget.listKey);
     
     setState(() {
       _list = list;
@@ -53,10 +56,47 @@ class _ListShowScreenState extends State<ListShowScreen> {
       appBar: AppBar(
         title: Text(_list.title),
         backgroundColor: _list.color,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return ItemAdd(_list);
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: _isLoading
         ? CircularProgressIndicator()
-        : Text('TODO: List Show'),
+        : Consumer<Items>(
+        builder: (context, auth, child) => FutureBuilder(
+          future: Items().items(_list.id),
+          builder: (context, response) {
+            if (response.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return ListView.builder(
+              itemCount: response.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                if (response.data == null) {
+                  return null;
+                }
+                
+                return ...response.data.map((Map<String, dynamic> values) {
+                  return Text('value');
+                }).toList();
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }

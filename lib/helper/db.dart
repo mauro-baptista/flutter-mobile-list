@@ -21,4 +21,18 @@ class DB {
 
     return data.value;
   }
+
+  String store(String id, Map<String, dynamic> data) {
+    var instance = (id == null) 
+      ? reference.push()
+      : reference.child(id);
+
+    instance.set(data);
+
+    return instance.key;
+  }
+
+  void update(String id, Map<String, dynamic> data) async {
+    await reference.child(id).update(data);
+  }
 }

@@ -57,7 +57,6 @@ class Auth with ChangeNotifier {
     assert(user.uid == currentUser.uid);
 
     _user = User(
-      id: user.uid,
       name: user.displayName,
       email: user.email,
       image: user.photoUrl,

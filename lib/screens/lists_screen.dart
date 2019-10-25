@@ -3,18 +3,12 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 import '../providers/auth.dart';
+import '../providers/lists.dart';
 import '../screens/list_create_screen.dart';
 import '../widgets/main_drawer.dart';
-import '../widgets/list.dart' as list;
+import '../widgets/list.dart' as listWidget;
 
 class ListsScreen extends StatelessWidget {
-  
-  Future<List<list.List>> _loadLists(User user) async {
-      List<String> lists = await user.lists();
-      
-      return lists.map((listKey) => list.List(listKey)).toList();
-  }
-
   @override
   Widget build(BuildContext context) {
     final User _user = Provider.of<Auth>(context, listen: false).user;
@@ -32,22 +26,28 @@ class ListsScreen extends StatelessWidget {
         ],
       ),
       drawer: MainDrawer(),
-      body: FutureBuilder(
-        future: _user.lists(),
-        builder: (context, response) {
-          if (response.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+      body: Consumer<Lists>(
+        builder: (context, auth, child) => FutureBuilder(
+          future: Lists().lists(_user.firebaseId),
+          builder: (context, response) {
+            if (response.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          return ListView.builder(
-            itemCount: response.data.length,
-            itemBuilder: (context, index) {
-              return list.List(response.data[index]);
-            },
-          );
-        },
+            return ListView.builder(
+              itemCount: response.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                if (response.data == null) {
+                  return null;
+                }
+                
+                return listWidget.List(response.data[index]);
+              },
+            );
+          },
+        ),
       ),
     );
   }

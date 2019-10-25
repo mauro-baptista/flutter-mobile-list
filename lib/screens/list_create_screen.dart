@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
 import '../models/user.dart';
-import '../models/list.dart';
+import '../providers/lists.dart';
 import './list_show_screen.dart';
 
 class ListCreateScreen extends StatefulWidget {
@@ -17,7 +17,6 @@ class ListCreateScreen extends StatefulWidget {
 class _ListCreateScreenState extends State<ListCreateScreen> {
   final _form = GlobalKey<FormState>();
   
-
   String _title;
   bool _isShared = false;
   Color _pickedColor = Color(0xff03a9f4);
@@ -35,11 +34,11 @@ class _ListCreateScreenState extends State<ListCreateScreen> {
       _isLoading = true;
     });
 
-    String listKey = List(
+    String listKey = Lists(
       title: _title,
       color: _pickedColor,
       shared: _isShared,
-      user: user,
+      owner: user,
     ).store();
         
     Navigator.of(context).pushReplacement(

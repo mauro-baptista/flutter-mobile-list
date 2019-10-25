@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
+import './providers/items.dart';
+import './providers/lists.dart';
 import './screens/lists_screen.dart';
 import './screens/list_connect_screen.dart';
 import './screens/list_create_screen.dart';
@@ -17,6 +19,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Lists(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Items(),
         ),
       ],
       child: Consumer<Auth>(
